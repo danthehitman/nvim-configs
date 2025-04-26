@@ -1,0 +1,1 @@
+{"secondary_sources":[],"schema_version":"1.1","primary_source":{"type":"registry+v1","id":"pkg:pypi/cpplint@2.0.2"},"links":{"bin":{"cpplint.cmd":"venv\\Scripts\\cpplint.exe"},"opt":{},"share":{}},"name":"cpplint","metrics":{"start_time":1745616461973,"completion_time":1745616470662}}

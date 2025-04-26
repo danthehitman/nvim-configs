@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='D:/Dan/Dev/nvim/nvim-test/lua/config'
+let g:netrw_dirhist_5='D:/Dan/Dev/nvim/nvim-test/lua/config/plugins'
+let g:netrw_dirhist_4='D:/Dan/Dev/nvim/nvim-test/lua/config'
+let g:netrw_dirhist_3='D:/Dan/Dev/nvim/nvim-test/lua'
+let g:netrw_dirhist_2='D:/Dan/Dev/nvim/nvim-test'
+let g:netrw_dirhist_1='D:/Dan/Dev/nvim'
+let g:netrw_dirhist_0='D:/Dan/Dev'
+let g:netrw_dirhist_9='D:/Dan/Dev/codename-game3d'
+let g:netrw_dirhist_8='D:/Dan/Dev/nvim/nvim-test/lua/config/plugins'
+let g:netrw_dirhist_7='D:/Dan/Dev/nvim/nvim-test/lua/config'
