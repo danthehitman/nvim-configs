@@ -15,8 +15,26 @@ return {
       }
     },
     config = function()
+      local lspconfig = require("lspconfig")
+      local util      = require("lspconfig.util")
       require("lspconfig").lua_ls.setup {}
-      require("lspconfig").clangd.setup {}
+      require("lspconfig").clangd.setup {
+        cmd = {
+          "clangd",
+          "--background-index", -- full project indexing
+          "--clang-tidy",       -- optional
+          "--completion-style=detailed",
+          "--header-insertion=never",
+        },
+        root_dir = util.root_pattern(
+          "compile_commands.json",
+          "compile_flags.txt",
+          ".git"
+        ),
+        init_options = {
+          compilationDatabaseDirectory = "build",
+        },
+      }
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('my.lsp', {}),
         callback = function(args)
@@ -24,14 +42,27 @@ return {
           if client:supports_method('textDocument/implementation') then
             -- Create a keymap for vim.lsp.buf.implementation ...
           end
-
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+            buffer = args.buf, desc = "LSP: Go to Definition"
+          })
+          -- references
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, {
+            buffer = args.buf, desc = "LSP: Find References"
+          })
+          -- implementation
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {
+            buffer = args.buf, desc = "LSP: Go to Implementation"
+          })
+          -- hover
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, {
+            buffer = args.buf, desc = "LSP: Hover Documentation"
+          })
           -- Auto-format ("lint") on save.
           -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
           if not client:supports_method('textDocument/willSaveWaitUntil')
               and client:supports_method('textDocument/formatting') then
             vim.api.nvim_create_autocmd('BufWritePre', {
               group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
-              buffer = args.buf,
               callback = function()
                 vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
               end,
