@@ -3,6 +3,28 @@ print("test app")
 require("config.lazy")
 require("mason").setup()
 
+local util = require("lspconfig.util")
+local path = util.path -- helper for path.join
+
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
+  callback = function()
+    local cwd  = vim.fn.getcwd()
+    -- 1) find the directory that contains misc/nvim.lua
+    local root = util.root_pattern("misc/nvim.lua")(cwd)
+    if not root then
+      return
+    end
+
+    -- 2) build the full filename
+    local conf_file = path.join(root, "misc", "nvim.lua")
+    -- 3) make sure it exists
+    if vim.fn.filereadable(conf_file) == 1 then
+      print("▶ Loading per-project config: " .. conf_file)
+      dofile(conf_file)
+    end
+  end,
+})
+
 vim.opt.shiftwidth = 2
 vim.opt.clipboard = "unnamedplus"
 
