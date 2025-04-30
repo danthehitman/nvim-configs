@@ -27,10 +27,16 @@ vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
 
 vim.opt.shiftwidth = 2
 vim.opt.clipboard = "unnamedplus"
+vim.opt.number = true
+vim.opt.relativenumber = true
 
 vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
 vim.keymap.set("n", "<space>x", ":.lua<CR>")
 vim.keymap.set("v", "<space>x", ":lua<CR>")
+vim.keymap.set("n", "-", "<cmd>Oil<CR>")
+vim.keymap.set("n", "<M-j>", "<cmd>cnext<CR>")
+vim.keymap.set("n", "<M-k>", "<cmd>cprev<CR>")
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -54,5 +60,3 @@ vim.keymap.set("n", "<space>st", function()
   vim.cmd.wincmd("J")
   vim.api.nvim_win_set_height(0, 15)
 end)
-
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
