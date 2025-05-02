@@ -180,6 +180,17 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        pickers = {
+          find_files = {
+            mappings = {
+              i = {
+                ['<M-v>'] = function(prompt_state)
+                  require('telescope.actions').select_vertical(prompt_state)
+                end,
+              },
+            },
+          },
+        },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
