@@ -1,5 +1,16 @@
 return {
   {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       {
@@ -16,7 +27,17 @@ return {
       }
     },
     config = function()
-      local lspconfig    = require("lspconfig")
+      require("blink.cmp").setup({
+        cmp_opts = {
+          mapping = {
+            ["<C-Space>"] = require("cmp").mapping.complete(),
+            ["<CR>"] = require("cmp").mapping.confirm({ select = true }),
+            ["<Tab>"] = require("cmp").mapping.select_next_item({ behavior = require("cmp").SelectBehavior.Insert }),
+            ["<S-Tab>"] = require("cmp").mapping.select_prev_item({ behavior = require("cmp").SelectBehavior.Insert }),
+          },
+        },
+      })
+
       local capabilities = require('blink.cmp').get_lsp_capabilities()
       local util         = require("lspconfig.util")
       require("lspconfig").lua_ls.setup { capatilities = capabilities }
@@ -44,6 +65,12 @@ return {
           if client:supports_method('textDocument/implementation') then
             -- Create a keymap for vim.lsp.buf.implementation ...
           end
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {
+            buffer = args.buf, desc = "LSP: Code Actions"
+          })
+          vim.keymap.set("n", "<leader>ta", require("telescope.builtin").lsp_code_actions, {
+            buffer = args.buf, desc = "Telescope: Code Actions"
+          })
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
             buffer = args.buf, desc = "LSP: Go to Definition"
           })

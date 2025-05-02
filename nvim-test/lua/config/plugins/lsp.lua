@@ -16,8 +16,9 @@ return {
       }
     },
     config = function()
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local util         = require("lspconfig.util")
+      local capabilities          = require('blink.cmp').get_lsp_capabilities()
+      capabilities.offsetEncoding = { "utf-16" }
+      local util                  = require("lspconfig.util")
       require("lspconfig").lua_ls.setup { capatilities = capabilities }
       require("lspconfig").clangd.setup {
         cmd = {
@@ -27,6 +28,7 @@ return {
           "--completion-style=detailed",
           "--header-insertion=never",
         },
+        capabilities = capabilities,
         root_dir = util.root_pattern(
           "compile_commands.json",
           "compile_flags.txt",
@@ -36,6 +38,16 @@ return {
           compilationDatabaseDirectory = "build",
         },
       }
+      vim.diagnostic.config({
+        virtual_text = {
+          prefix = "●",
+          spacing = 2,
+        },
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+      })
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('my.lsp', {}),
         callback = function(args)
