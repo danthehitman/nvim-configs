@@ -89,7 +89,6 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -214,6 +213,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 require 'config.lazy'
+
+-- TODO: DAN: This is ChatGPT crap, I am sure it needs to change.
+local util = require 'lspconfig.util'
+local path = util.path -- helper for path.join
+vim.api.nvim_create_autocmd({ 'VimEnter', 'DirChanged' }, {
+  callback = function()
+    local cwd = vim.fn.getcwd()
+    -- 1) find the directory that contains misc/nvim.lua
+    local root = util.root_pattern 'misc/nvim.lua'(cwd)
+    if not root then
+      return
+    end
+
+    -- 2) build the full filename
+    local conf_file = path.join(root, 'misc', 'nvim.lua')
+    -- 3) make sure it exists
+    if vim.fn.filereadable(conf_file) == 1 then
+      print('▶ Loading per-project config: ' .. conf_file)
+      dofile(conf_file)
+    end
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

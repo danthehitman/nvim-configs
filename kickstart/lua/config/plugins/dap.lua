@@ -15,6 +15,14 @@ return {
       require('dapui').setup()
       require('dap-go').setup()
 
+      dap.adapters.codelldb = {
+        type = 'executable',
+        command = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb.exe', -- or if not in $PATH: "/absolute/path/to/codelldb"
+
+        -- On windows you may have to uncomment this:
+        -- detached = false,
+      }
+
       -- Handled by nvim-dap-go
       -- dap.adapters.go = {
       --   type = "server",
