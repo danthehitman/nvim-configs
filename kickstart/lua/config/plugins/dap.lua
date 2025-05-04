@@ -14,7 +14,10 @@ return {
 
       require('dapui').setup()
       require('dap-go').setup()
-
+      require('nvim-dap-virtual-text').setup {
+        highlight_changed_variables = true,
+        show_stop_reason = true,
+      }
       dap.adapters.codelldb = {
         type = 'executable',
         command = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb.exe', -- or if not in $PATH: "/absolute/path/to/codelldb"
@@ -54,6 +57,7 @@ return {
       end
 
       vim.keymap.set('n', '<space>b', dap.toggle_breakpoint)
+      vim.keymap.set('n', '<space>B', ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
       vim.keymap.set('n', '<space>gb', dap.run_to_cursor)
 
       -- Eval var under cursor
