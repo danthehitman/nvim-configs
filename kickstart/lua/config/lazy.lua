@@ -1,4 +1,4 @@
--- [[ Install `lazy.nvim` plugin manager ]]
+-- [[ Install `lazy.nvim` plugin manager ]]lazy
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -181,6 +181,15 @@ require('lazy').setup({
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
         pickers = {
+          buffers = {
+            mappings = {
+              i = {
+                ['<M-v>'] = function(prompt_state)
+                  require('telescope.actions').select_vertical(prompt_state)
+                end,
+              },
+            },
+          },
           find_files = {
             mappings = {
               i = {
@@ -564,7 +573,12 @@ require('lazy').setup({
       },
     },
   },
-
+  {
+    'rafamadriz/friendly-snippets',
+    config = function()
+      require('luasnip.loaders.from_vscode').lazy_load()
+    end,
+  },
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -574,6 +588,7 @@ require('lazy').setup({
       {
         'giuxtaposition/blink-cmp-copilot',
         'L3MON4D3/LuaSnip',
+
         version = '2.*',
         build = (function()
           -- Build Step is needed for regex support in snippets.
@@ -588,12 +603,6 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
         },
         opts = {},
       },
